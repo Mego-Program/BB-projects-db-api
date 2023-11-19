@@ -4,7 +4,6 @@ const app = express();
 const port = 3000;
 const boardRouter = require('./models/board');
 const taskRouter = require('./models/task');
-const statusRouter = require('./models/status');
 
 // Authentication middleware
 const axios = require('axios');
@@ -38,4 +37,6 @@ app.use(express.json());
 
 app.use('/board', boardRouter);
 app.use('/task', taskRouter);
-app.use('/status', statusRouter);
+
+// possible future feature: create custom statuses
+// app.use('/status', statusRouter);

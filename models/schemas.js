@@ -5,7 +5,6 @@ const boardSchema = new mongoose.Schema({
     description: String,
     creationDate: { type: Date, default: Date.now },
     users: Array,
-    statuses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Status' }]
 });
 
 const taskSchema = new mongoose.Schema({
@@ -21,6 +20,7 @@ const statusSchema = new mongoose.Schema({
     name: String,
     description: String,
     creationDate: { type: Date, default: Date.now },
+    precedence: Number,
 });
 
 module.exports = {
