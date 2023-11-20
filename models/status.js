@@ -2,22 +2,38 @@ const db = require('../connect');
 
 const Status = db.model('Status', require('./schemas').statusSchema);
 
-const ToDo = getDefaultStatus('To Do');
+const Open = getDefaultStatus('Open');
 const InProgress = getDefaultStatus('In Progress');
-const Done = getDefaultStatus('Done');
+const Resolved = getDefaultStatus('Resolved');
+const Closed = getDefaultStatus('Closed');
 
 const defaultStatusDescriptions = {
-    'To Do': 'Tasks that are yet to be started.',
+    'Open': 'Tasks that are yet to be started.',
     'In Progress': 'Tasks that are in progress.',
-    'Done': 'Tasks that are completed.'
+    'Resolved': 'Tasks that are resolved.',
+    'Closed': 'Tasks that are completed.'
 };
 const defaultStatusPrecedences = {
-    'To Do': 0,
+    'Open': 0,
     'In Progress': 50,
-    'Done': 99
+    'Resolved': 75,
+    'Closed': 99
 };
 
+async function dbReady() {
+    console.log('waiting for db');
+    console.time('waiting for db');
+    while (db.readyState !== 1) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+    };
+    console.timeEnd('waiting for db');
+    console.log('db ready');
+}
+
 async function getDefaultStatus(name) {
+    if (name == 'Open') {
+    await dbReady();
+    }
     let query = await Status.findOne({ name: name });
     if (query) {
         console.log('retreived default status: '+ query.name)
@@ -34,11 +50,14 @@ async function getDefaultStatus(name) {
 };
 
 const defaultStatuses = {
-    ToDo: ToDo,
+    Open: Open,
     InProgress: InProgress,
-    Done: Done
+    Resolved: Resolved,
+    Closed: Closed
 }
+
 module.exports = defaultStatuses;
+
 
 // possible future feature: create custom statuses
 

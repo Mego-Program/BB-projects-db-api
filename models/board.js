@@ -60,5 +60,16 @@ router.delete('/delete', (req, res) => {
     res.send('delete board')
 });
 
+router.param('boardId', async (req, res, next, boardId) => {
+    try {
+        req.board = await Board.findById(boardId).exec();
+        next()
+    } catch (error) {
+        res.status(404).json({ error: 'Board not found' });
+    };
+});
+
+
+router.use('/:boardId/task', require('./task'))
 
 module.exports = router

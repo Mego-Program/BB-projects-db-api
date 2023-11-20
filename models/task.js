@@ -2,9 +2,6 @@ const express = require('express');
 const router = express.Router();
 const statuses = require('./status');
 
-const db = require('../connect');
-const Task = db.model('Task', require('./schemas').taskSchema);
-
 router.all('/create', (req, res, next) => {
     if (req.method !== 'POST') {
         res.sendStatus(405);
@@ -14,16 +11,15 @@ router.all('/create', (req, res, next) => {
 });
 router.post('/create', async (req, res) => {
     try {
-        let task = new Task({
+        const board = req.board;
+        board.tasks.push({
             name: req.body.name,
             description: req.body.description,
-            status: await statuses.ToDo,
-            board: req.body.board,
+            status: await statuses.Open,
             users: req.body.users
         });
-        task.populate('status');
-        await task.save();
-        res.status(201).send(task);
+        await board.save();
+        res.status(201).send(board.tasks[board.tasks.length - 1]);
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: 'Internal Server Error' });
@@ -31,7 +27,7 @@ router.post('/create', async (req, res) => {
 });
 
 router.get('/read', (req, res) => {
-    res.send('read task');
+    res.json(req.board);
 });
 
 router.put('/update', (req, res) => {
