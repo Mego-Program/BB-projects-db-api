@@ -10,6 +10,15 @@ router.all('/create', (req, res, next) => {
     }
 });
 router.post('/create', async (req, res) => {
+    if (!req.body.name) {
+        res.status(400).json({ error: 'Task must include name' });
+    };
+    if (!req.body.description) {
+        res.status(400).json({ error: 'Task must include description' });
+    };
+    if (!req.body.users) {
+        res.status(400).json({ error: 'Task must include users' });
+    };
     try {
         const board = req.board;
         board.tasks.push({

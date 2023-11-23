@@ -13,11 +13,11 @@ const boardSchema = new mongoose.Schema({
     name: String,
     description: String,
     creationDate: { type: Date, default: Date.now },
-    deadLineDate:{ type: Date, default: Date.now },
+    isSprint: Boolean,
+    endDate: Date,
     users: Array,
     tasks: [taskSchema],
     comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Comment'}]
-
 });
 
 
