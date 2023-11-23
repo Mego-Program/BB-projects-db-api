@@ -1,12 +1,19 @@
 const mongoose = require("mongoose");
 
+const commentSchema = new mongoose.Schema({
+    title: String,
+    content: String,
+    creationDate: { type: Date, default: Date.now },
+});
+
+
 const taskSchema = new mongoose.Schema({
     name: String,
     description: String,
     creationDate: { type: Date, default: Date.now },
     status: { type: mongoose.Schema.Types.ObjectId, ref: 'Status'},
     users: Array,
-    comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Comment'}]
+    comments: [commentSchema]
 });
 
 const boardSchema = new mongoose.Schema({
@@ -26,14 +33,6 @@ const statusSchema = new mongoose.Schema({
     description: String,
     creationDate: { type: Date, default: Date.now },
     precedence: Number,
-});
-
-const commentSchema = new mongoose.Schema({
-    title: String,
-    text: String,
-    creationDate: { type: Date, default: Date.now },
-    rootType: { type: String, enum: ["Task", "Board"] },
-    rootId: mongoose.Schema.Types.ObjectId 
 });
 
 
