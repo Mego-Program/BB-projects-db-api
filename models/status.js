@@ -56,7 +56,12 @@ const defaultStatuses = {
     Closed: Closed
 }
 
-module.exports = defaultStatuses;
+const getStatus = async (name) => {
+    return (await Status.findOne({ name: name }));
+}
+
+
+module.exports = {defaultStatuses , getStatus};
 
 
 // possible future feature: create custom statuses

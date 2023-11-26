@@ -1,8 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const db = require('../connect')
+const checkUsers = require('../utils/checkUsers')
 
 const Board = db.model('Board', require('./schemas').boardSchema)
+
 
 router.all('/create', (req, res, next) => {
     if (req.method !== 'POST') {
@@ -13,16 +15,16 @@ router.all('/create', (req, res, next) => {
 });
 router.post('/create', async (req, res) => {
     if (!req.body.name) {
-        res.status(400).json({ error: 'Board must include name' });
+        return res.status(400).json({ error: 'Board must include name' });
     };
     if (!req.body.description) {
-        res.status(400).json({ error: 'Board must include description' });
+        return res.status(400).json({ error: 'Board must include description' });
     };
-    if (!req.body.users) {
-        res.status(400).json({ error: 'Board must include users' });
+    if (!checkUsers(req.body.users)) {
+        return res.status(400).json({ error: 'Users must be sent as non-empty array of strings' });
     };
     if (req.body.isSprint && !req.body.sprintLength) {
-        res.status(400).json({ error: 'Sprint must include sprintLength in minutes' });
+        return res.status(400).json({ error: 'Sprint must include sprintLength in minutes' });
     };
     try {
         const board = new Board({
@@ -82,8 +84,8 @@ router.all('/:boardId/update/users', (req, res, next) => {
     }
 });
 router.put('/:boardId/update/users', (req, res) => {
-    if (!req.body.users) {
-        res.status(400).json({ error: 'Board must include users' });
+    if (!checkUsers(req.body.users)) {
+        return res.status(400).json({ error: 'Users must be sent as non-empty array of strings' });
     };
     try {
         req.board.users = req.body.users;
@@ -128,4 +130,4 @@ router.param('boardId', async (req, res, next, boardId) => {
 
 router.use('/:boardId/task', require('./task'))
 
-module.exports = router
+module.exports = {router, checkUsers}

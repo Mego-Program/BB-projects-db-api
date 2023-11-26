@@ -2,7 +2,7 @@
 const express = require('express');
 const app = express();
 const port = 3000;
-const boardRouter = require('./models/board');
+const boardRouter = require('./models/board').router;
 
 // Authentication middleware
 const axios = require('axios');
@@ -20,8 +20,8 @@ app.use((req, res, next) => {
     //     // If authentication fails, return an error response
     //     res.status(401).json({ error: 'Unauthorized' });
     // });
-    if (req.headers.usertoken) {
-        req.user = req.headers.usertoken
+    if (req.headers.authorization) {
+        req.user = req.headers.authorization
         next();
     } else {
         res.status(401).json({ error: 'Unauthorized' });
@@ -29,7 +29,7 @@ app.use((req, res, next) => {
 });
 
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+    console.log(`Server is running at http://127.0.0.1:${port}`);
 });
 
 app.use(express.json());
