@@ -41,16 +41,15 @@ router.patch('/:commentId/update', (req, res) => {
     res.json(req.comment);
 });
 
-router.all('/delete', (req, res, next) => {
-    if (req.method !== 'DELETE') {
-        res.sendStatus(405);
-    } else {
-        next();
-    }
-});
-
-router.delete('/delete', (req, res) => {
-    res.send('delete comment');
+router.all('/:commentId/delete', enforcers.enforceDelete);
+router.delete('/:commentId/delete', (req, res) => {
+    try {
+        req.comment.deleteOne();
+        req.board.save();
+        res.sendStatus(204);
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' });
+    }   
 });
 
 router.param('commentId', async (req, res, next, commentId) => {

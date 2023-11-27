@@ -96,7 +96,6 @@ router.delete('/:boardId/delete', async (req, res) => {
 
 router.param('boardId', async (req, res, next, boardId) => {
     try {
-        console.log(boardId);
         req.board = await Board.findById(boardId).populate({path: 'tasks.status', select: 'name'}).exec();
         if (!req.board) {
             res.status(404).json({ error: 'Board not found' });
