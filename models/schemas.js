@@ -24,7 +24,7 @@ const boardSchema = new mongoose.Schema({
     endDate: Date,
     users: Array,
     tasks: [taskSchema],
-    comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Comment'}]
+    comments: [commentSchema]
 });
 
 

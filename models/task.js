@@ -134,4 +134,6 @@ router.param('taskId', async (req, res, next, taskId) => {
     next();
 });
 
+router.use('/:taskId/comment', require('./comment'));
+
 module.exports = router;

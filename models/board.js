@@ -128,6 +128,8 @@ router.param('boardId', async (req, res, next, boardId) => {
 });
 
 
-router.use('/:boardId/task', require('./task'))
+router.use('/:boardId/task', require('./task'));
+
+router.use('/:boardId/comment', require('./comment'));
 
 module.exports = {router, checkUsers}

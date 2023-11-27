@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../connect');
 
-const Comment = db.model('Comment', require('./schemas').commentSchema);
+router.use((req, res, next) => {
+    req.parent = req.task || req.board;
+    next();
+});
 
 router.all('/create', (req, res, next) => {
     if (req.method !== 'POST') {
@@ -11,47 +13,41 @@ router.all('/create', (req, res, next) => {
         next();
     }
 });
-
 router.post('/create', async (req, res) => {
+    if (!req.body.title) {
+        return res.status(400).json({ error: 'Comment must include title' });
+    };
     try {
-        const comment = new Comment({
+        req.parent.comments.push({
             title: req.body.title,
-            text: req.body.text
+            content: req.body.content
         });
-        await comment.save();
-        console.log('comment.id: ', comment.id);
-        res.send('create comment');
+        await req.board.save();
+        res.status(201).json(parent.comments[parent.comments.length - 1]);
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
-router.all('/read', (req, res, next) => {
+router.all('/:commentId/read', (req, res, next) => {
     if (req.method !== 'GET' && req.method !== 'HEAD') {
         res.sendStatus(405);
     } else {
         next();
     }
 });
-
-router.get('/read', async (req, res) => {
-    try {
-        const comments = await Comment.find().exec();
-        res.json(comments);
-    } catch (error) {
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
+router.get('/:commentId/read', async (req, res) => {
+    res.json(req.comment);
 });
 
-router.all('/update', (req, res, next) => {
+router.all('/:commentId/update', (req, res, next) => {
     if (req.method !== 'PUT') {
         res.sendStatus(405);
     } else {
         next();
     }
 });
-
-router.put('/update', (req, res) => {
+router.put('/:commentId/update', (req, res) => {
     res.send('update comment');
 });
 
@@ -69,13 +65,16 @@ router.delete('/delete', (req, res) => {
 
 router.param('commentId', async (req, res, next, commentId) => {
     try {
-        req.comment = await Comment.findById(commentId).exec();
-        next();
+        req.comment = req.parent.comments.id(commentId);
+        if (!req.comment) {
+            return res.status(404).json({ error: 'Comment not found' });
+        } else {
+            next();
+        };
     } catch (error) {
-        res.status(404).json({ error: 'comment not found' });
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
-router.use('/:commentId/task', require('./task'));
 
 module.exports = router;
