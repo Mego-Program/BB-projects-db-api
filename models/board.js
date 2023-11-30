@@ -2,17 +2,23 @@ const express = require('express')
 const router = express.Router()
 const db = require('../connect')
 const checkUsers = require('../utils/checkUsers')
+const enforcers = require('../utils/enforcers')
 
 const Board = db.model('Board', require('./schemas').boardSchema)
 
-
-router.all('/create', (req, res, next) => {
-    if (req.method !== 'POST') {
-        res.sendStatus(405)
-    } else {
-        next()
+router.all('/user/:userId/read', enforcers.enforceGet);
+router.get('/user/:userId/read', async (req, res) => {
+    try {
+        let boards = await Board.find({ users: req.params.userId }).populate({path: 'tasks.status', select: 'name'}).exec();
+        res.json(boards);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+
+router.all('/create', enforcers.enforcePost);
 router.post('/create', async (req, res) => {
     if (!req.body.name) {
         return res.status(400).json({ error: 'Board must include name' });
@@ -42,13 +48,7 @@ router.post('/create', async (req, res) => {
 });
 
 
-router.all('/:boardId/read', (req, res, next) => {
-    if (req.method !== 'GET' && req.method !== 'HEAD') {
-        res.sendStatus(405)
-    } else {
-        next()
-    }
-});
+router.all('/:boardId/read', enforcers.enforceGet);
 router.get('/:boardId/read', async (req, res) => {
     try {
         res.json(req.board);
@@ -58,14 +58,8 @@ router.get('/:boardId/read', async (req, res) => {
 });
 
 
-router.all('/:boardId/update', (req, res, next) => {
-    if (req.method !== 'PUT') {
-        res.sendStatus(405)
-    } else {
-        next()
-    }
-});
-router.put('/:boardId/update', async (req, res) => {
+router.use('/:boardId/update', enforcers.enforcePatch);
+router.patch('/:boardId/update', async (req, res) => {
     try {
         req.board.name = req.body.name || req.board.name;
         req.board.description = req.body.description || req.board.description;
@@ -76,14 +70,7 @@ router.put('/:boardId/update', async (req, res) => {
     }
 });
 
-router.all('/:boardId/update/users', (req, res, next) => {
-    if (req.method !== 'PUT') {
-        res.sendStatus(405)
-    } else {
-        next()
-    }
-});
-router.put('/:boardId/update/users', (req, res) => {
+router.patch('/:boardId/update/users', (req, res) => {
     if (!checkUsers(req.body.users)) {
         return res.status(400).json({ error: 'Users must be sent as non-empty array of strings' });
     };
@@ -97,13 +84,7 @@ router.put('/:boardId/update/users', (req, res) => {
 });
 
 
-router.all('/:boardId/delete', (req, res, next) => {
-    if (req.method !== 'DELETE') {
-        res.sendStatus(405)
-    } else {
-        next()
-    }
-});
+router.all('/:boardId/delete', enforcers.enforceDelete);
 router.delete('/:boardId/delete', async (req, res) => {
     try {
         let del = await Board.findByIdAndDelete(req.board._id).exec();
@@ -115,7 +96,7 @@ router.delete('/:boardId/delete', async (req, res) => {
 
 router.param('boardId', async (req, res, next, boardId) => {
     try {
-        req.board = await Board.findById(boardId).exec();
+        req.board = await Board.findById(boardId).populate({path: 'tasks.status', select: 'name'}).exec();
         if (!req.board) {
             res.status(404).json({ error: 'Board not found' });
         } else {

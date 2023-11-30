@@ -66,48 +66,5 @@ module.exports = {defaultStatuses , getStatus};
 
 // possible future feature: create custom statuses
 
-// const express = require('express');
-// const router = express.Router();
-
-// router.all('/create', (req, res, next) => {
-//     if (req.method !== 'POST') {
-//         res.sendStatus(405);
-//     } else {
-//         next();
-//     }
-// });
-// router.post('/create', (req, res) => {
-//     let status = new Status(req.body);
-//     status.save((err) => {
-//         if (err) {
-//             console.log(err);
-//             res.sendStatus(500);
-//         } else {
-//             res.sendStatus(201);
-//         }
-//     });
-// });
-
-// router.all('/update', (req, res, next) => {
-//     if (req.method !== 'PUT') {
-//         res.sendStatus(405);
-//     } else {
-//         next();
-//     }
-// });
-// router.put('/update', (req, res) => {
-//     res.sendStatus(501);
-// });
-
-// router.all('/delete', (req, res, next) => {
-//     if (req.method !== 'DELETE') {
-//         res.sendStatus(405);
-//     } else {
-//         next();
-//     }
-// });
-// router.delete('/delete', (req, res) => {
-//     res.sendStatus(501);
-// });
-
 // module.exports = router;
+

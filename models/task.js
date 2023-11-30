@@ -3,15 +3,9 @@ const router = express.Router();
 const statuses = require('./status').defaultStatuses;
 const getStatus = require('./status').getStatus;
 const checkUsers = require('../utils/checkUsers');
+const enforcers = require('../utils/enforcers');
 
-
-router.all('/create', (req, res, next) => {
-    if (req.method !== 'POST') {
-        res.sendStatus(405);
-    } else {
-        next();
-    }
-});
+router.all('/create', enforcers.enforcePost);
 router.post('/create', async (req, res) => {
     if (!req.body.name) {
         res.status(400).json({ error: 'Task must include name' });
@@ -38,25 +32,13 @@ router.post('/create', async (req, res) => {
     }
 });
 
-router.all('/:taskId/read', (req, res, next) => {
-    if (req.method !== 'GET' && req.method !== 'HEAD') {
-        res.sendStatus(405);
-    } else {
-        next();
-    }
-});
+router.all('/:taskId/read', enforcers.enforceGet);
 router.get('/:taskId/read', (req, res) => {
     res.json(req.task);
 });
 
-router.all('/:taskId/update', (req, res, next) => {
-    if (req.method !== 'PUT') {
-        res.sendStatus(405);
-    } else {
-        next();
-    }
-});
-router.put('/:taskId/update', async (req, res) => {
+router.use('/:taskId/update', enforcers.enforcePatch);
+router.patch('/:taskId/update', async (req, res) => {
     try {
         req.task.name = req.body.name || req.task.name;
         req.task.description = req.body.description || req.task.description;
@@ -67,15 +49,7 @@ router.put('/:taskId/update', async (req, res) => {
     }
 });
         
-
-router.all('/:taskId/update/users', (req, res, next) => {
-    if (req.method !== 'PUT') {
-        res.sendStatus(405);
-    } else {
-        next();
-    }
-});
-router.put('/:taskId/update/users', (req, res) => {
+router.patch('/:taskId/update/users', (req, res) => {
     if (!checkUsers(req.body.users)) {
         return res.status(400).json({ error: 'Users must be sent as non-empty array of strings' });
     };
@@ -88,14 +62,7 @@ router.put('/:taskId/update/users', (req, res) => {
     };
 });
 
-router.all('/:taskId/update/status', (req, res, next) => {
-    if (req.method !== 'PUT') {
-        res.sendStatus(405);
-    } else {
-        next();
-    }
-});
-router.put('/:taskId/update/status', async (req, res) => {
+router.patch('/:taskId/update/status', async (req, res) => {
     try {
         req.task.status = await getStatus(req.body.status);
         await req.board.save();
@@ -105,13 +72,7 @@ router.put('/:taskId/update/status', async (req, res) => {
     }
 });
 
-router.all('/:taskId/delete', (req, res, next) => {
-    if (req.method !== 'DELETE') {
-        res.sendStatus(405);
-    } else {
-        next();
-    }
-});
+router.all('/:taskId/delete', enforcers.enforceDelete);
 router.delete('/:taskId/delete', (req, res) => {
     try {
         req.task.deleteOne();
