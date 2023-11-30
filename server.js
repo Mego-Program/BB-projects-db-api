@@ -1,4 +1,4 @@
-
+const cors = require('cors')
 const express = require('express');
 const app = express();
 const port = 3000;
@@ -6,6 +6,8 @@ const boardRouter = require('./models/board').router;
 
 // Authentication middleware
 const axios = require('axios');
+app.use(cors());
+
 
 app.use((req, res, next) => {
     // // Call the auth API to authenticate the request
