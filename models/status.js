@@ -1,6 +1,6 @@
-const db = require('../connect');
+import { model, readyState } from '../connect';
 
-const Status = db.model('Status', require('./schemas').statusSchema);
+const Status = model('Status', require('./schemas').default.statusSchema);
 
 const Open = getDefaultStatus('Open');
 const InProgress = getDefaultStatus('In Progress');
@@ -23,7 +23,7 @@ const defaultStatusPrecedences = {
 async function dbReady() {
     console.log('waiting for db');
     console.time('waiting for db');
-    while (db.readyState !== 1) {
+    while (readyState !== 1) {
         await new Promise(resolve => setTimeout(resolve, 100));
     };
     console.timeEnd('waiting for db');
@@ -61,7 +61,7 @@ const getStatus = async (name) => {
 }
 
 
-module.exports = {defaultStatuses , getStatus};
+export default {defaultStatuses , getStatus};
 
 
 // possible future feature: create custom statuses

@@ -1,12 +1,12 @@
-const express = require('express')
-const router = express.Router()
-const db = require('../connect')
-const checkUsers = require('../utils/checkUsers')
-const enforcers = require('../utils/enforcers')
+import { Router } from 'express'
+const router = Router()
+import { model } from '../connect'
+import checkUsers from '../utils/checkUsers'
+import { enforceGet, enforcePost, enforcePatch, enforceDelete } from '../utils/enforcers'
 
-const Board = db.model('Board', require('./schemas').boardSchema)
+const Board = model('Board', require('./schemas').default.boardSchema)
 
-router.all('/user/:userId/read', enforcers.enforceGet);
+router.all('/user/:userId/read', enforceGet);
 router.get('/user/:userId/read', async (req, res) => {
     try {
         let boards = await Board.find({ users: req.params.userId }).populate({path: 'tasks.status', select: 'name'}).exec();
@@ -18,7 +18,7 @@ router.get('/user/:userId/read', async (req, res) => {
 });
 
 
-router.all('/create', enforcers.enforcePost);
+router.all('/create', enforcePost);
 router.post('/create', async (req, res) => {
     if (!req.body.name) {
         return res.status(400).json({ error: 'Board must include name' });
@@ -48,7 +48,7 @@ router.post('/create', async (req, res) => {
 });
 
 
-router.all('/:boardId/read', enforcers.enforceGet);
+router.all('/:boardId/read', enforceGet);
 router.get('/:boardId/read', async (req, res) => {
     try {
         res.json(req.board);
@@ -58,7 +58,7 @@ router.get('/:boardId/read', async (req, res) => {
 });
 
 
-router.use('/:boardId/update', enforcers.enforcePatch);
+router.use('/:boardId/update', enforcePatch);
 router.patch('/:boardId/update', async (req, res) => {
     try {
         req.board.name = req.body.name || req.board.name;
@@ -84,7 +84,7 @@ router.patch('/:boardId/update/users', (req, res) => {
 });
 
 
-router.all('/:boardId/delete', enforcers.enforceDelete);
+router.all('/:boardId/delete', enforceDelete);
 router.delete('/:boardId/delete', async (req, res) => {
     try {
         let del = await Board.findByIdAndDelete(req.board._id).exec();
@@ -109,8 +109,8 @@ router.param('boardId', async (req, res, next, boardId) => {
 });
 
 
-router.use('/:boardId/task', require('./task'));
+router.use('/:boardId/task', require('./task').default);
 
-router.use('/:boardId/comment', require('./comment'));
+router.use('/:boardId/comment', require('./comment').default);
 
-module.exports = {router, checkUsers}
+export default {router, checkUsers}

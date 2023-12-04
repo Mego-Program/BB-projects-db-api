@@ -1,11 +1,11 @@
-const express = require('express');
-const router = express.Router();
-const statuses = require('./status').defaultStatuses;
-const getStatus = require('./status').getStatus;
-const checkUsers = require('../utils/checkUsers');
-const enforcers = require('../utils/enforcers');
+import { Router } from 'express';
+const router = Router();
+const statuses = require('./status').default.defaultStatuses;
+const getStatus = require('./status').default.getStatus;
+import checkUsers from '../utils/checkUsers';
+import { enforcePost, enforceGet, enforcePatch, enforceDelete } from '../utils/enforcers';
 
-router.all('/create', enforcers.enforcePost);
+router.all('/create', enforcePost);
 router.post('/create', async (req, res) => {
     if (!req.body.name) {
         res.status(400).json({ error: 'Task must include name' });
@@ -32,12 +32,12 @@ router.post('/create', async (req, res) => {
     }
 });
 
-router.all('/:taskId/read', enforcers.enforceGet);
+router.all('/:taskId/read', enforceGet);
 router.get('/:taskId/read', (req, res) => {
     res.json(req.task);
 });
 
-router.use('/:taskId/update', enforcers.enforcePatch);
+router.use('/:taskId/update', enforcePatch);
 router.patch('/:taskId/update', async (req, res) => {
     try {
         req.task.name = req.body.name || req.task.name;
@@ -72,7 +72,7 @@ router.patch('/:taskId/update/status', async (req, res) => {
     }
 });
 
-router.all('/:taskId/delete', enforcers.enforceDelete);
+router.all('/:taskId/delete', enforceDelete);
 router.delete('/:taskId/delete', (req, res) => {
     try {
         req.task.deleteOne();
@@ -95,6 +95,6 @@ router.param('taskId', async (req, res, next, taskId) => {
     next();
 });
 
-router.use('/:taskId/comment', require('./comment'));
+router.use('/:taskId/comment', require('./comment').default);
 
-module.exports = router;
+export default router;
