@@ -78,7 +78,7 @@ router.patch('/:boardId/update/users', (req, res) => {
         return res.status(400).json({ error: 'Users must be sent as non-empty array of strings' });
     };
     try {
-     no   req.board.users = req.body.users;
+        req.board.users = req.body.users;
         req.board.save();
         res.json(req.board);
     } catch (error) {     
