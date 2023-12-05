@@ -1,10 +1,13 @@
-import { Router } from 'express'
-const router = Router()
-import { model } from '../connect'
-import checkUsers from '../utils/checkUsers'
-import { enforceGet, enforcePost, enforcePatch, enforceDelete } from '../utils/enforcers'
+import express from 'express';
+const router = express.Router();
+import db from '../connect.js'
+import checkUsers from '../utils/checkUsers.js'
+import { enforceGet, enforcePost, enforcePatch, enforceDelete } from '../utils/enforcers.js'
+import taskRouter from './task.js'
+import commentRouter from './comment.js'
+import schemas from './schemas.js'
 
-const Board = model('Board', require('./schemas').default.boardSchema)
+const Board = db.model('Board',schemas.boardSchema)
 
 router.all('/user/:userId/read', enforceGet);
 router.get('/user/:userId/read', async (req, res) => {
@@ -75,13 +78,63 @@ router.patch('/:boardId/update/users', (req, res) => {
         return res.status(400).json({ error: 'Users must be sent as non-empty array of strings' });
     };
     try {
-        req.board.users = req.body.users;
+     no   req.board.users = req.body.users;
         req.board.save();
         res.json(req.board);
     } catch (error) {     
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+function addUserToBoard(board, userId) {
+    const index = board.users.indexOf(userId);
+
+    if (index === -1 && userId )  {
+        board.users.push(userId);
+    }
+    board.save();
+}
+
+function removeUserFromBoard(board, userId) {
+    const index = board.users.indexOf(userId);
+
+    if (index !== -1) {
+        board.users.splice(index, 1);
+    }
+
+    board.save();
+}
+
+router.patch('/:boardId/update/users/:userId/add', (req, res) => {
+    const { boardId, userId } = req.params;
+
+    if (!checkUsers(req.body.users)) {
+        return res.status(400).json({ error: 'Users must be sent as a non-empty array of strings' });
+    }
+
+    try {
+        addUserToBoard(req.board, userId);
+        res.json(req.board);
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+router.patch('/:boardId/update/users/:userId/remove', (req, res) => {
+    const { boardId, userId } = req.params;
+
+    if (!checkUsers(req.body.users)) {
+        return res.status(400).json({ error: 'Users must be sent as a non-empty array of strings' });
+    }
+
+    try {
+        removeUserFromBoard(req.board, userId);
+        res.json(req.board);
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 
 
 router.all('/:boardId/delete', enforceDelete);
@@ -109,8 +162,8 @@ router.param('boardId', async (req, res, next, boardId) => {
 });
 
 
-router.use('/:boardId/task', require('./task').default);
+router.use('/:boardId/task', taskRouter);
 
-router.use('/:boardId/comment', require('./comment').default);
+router.use('/:boardId/comment', commentRouter);
 
-export default {router, checkUsers}
+export {router, checkUsers}

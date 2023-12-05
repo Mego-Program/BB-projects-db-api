@@ -1,6 +1,7 @@
-import { model, readyState } from '../connect';
+import db from '../connect.js';
+import schemas from './schemas.js';
 
-const Status = model('Status', require('./schemas').default.statusSchema);
+const Status = db.model('Status', schemas.statusSchema);
 
 const Open = getDefaultStatus('Open');
 const InProgress = getDefaultStatus('In Progress');
@@ -23,7 +24,7 @@ const defaultStatusPrecedences = {
 async function dbReady() {
     console.log('waiting for db');
     console.time('waiting for db');
-    while (readyState !== 1) {
+    while (db.readyState !== 1) {
         await new Promise(resolve => setTimeout(resolve, 100));
     };
     console.timeEnd('waiting for db');

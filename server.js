@@ -1,11 +1,11 @@
 
-const express = require('express');
+import express, { json } from 'express';
 const app = express();
 const port = 3000;
-const boardRouter = require('./models/board').default.router;
+import { router as boardRouter } from './models/board.js';
 
 // Authentication middleware
-const axios = require('axios');
+import axios from 'axios';
 
 app.use((req, res, next) => {
     // // Call the auth API to authenticate the request
@@ -32,7 +32,7 @@ app.listen(port, () => {
     console.log(`Server is running at http://127.0.0.1:${port}`);
 });
 
-app.use(express.json());
+app.use(json());
 app.use((req, res, next) => {
     console.log(req.method + ' ' + req.path);
     next();

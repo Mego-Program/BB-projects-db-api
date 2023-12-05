@@ -1,20 +1,21 @@
 import { Router } from 'express';
+import commentRouter from './comment.js';
 const router = Router();
-const statuses = require('./status').default.defaultStatuses;
-const getStatus = require('./status').default.getStatus;
-import checkUsers from '../utils/checkUsers';
-import { enforcePost, enforceGet, enforcePatch, enforceDelete } from '../utils/enforcers';
+const statuses = import('./status.js').defaultStatuses;
+const getStatus = import('./status.js').getStatus;
+import checkUsers from '../utils/checkUsers.js';
+import { enforcePost, enforceGet, enforcePatch, enforceDelete } from '../utils/enforcers.js';
 
 router.all('/create', enforcePost);
 router.post('/create', async (req, res) => {
     if (!req.body.name) {
-        res.status(400).json({ error: 'Task must include name' });
+       return res.status(400).json({ error: 'Task must include name' });
     };
     if (!req.body.description) {
-        res.status(400).json({ error: 'Task must include description' });
+        return res.status(400).json({ error: 'Task must include description' });
     };
     if (!checkUsers(req.body.users)) {
-        res.status(400).json({ error: 'Task must include users as non-empty array of strings' });
+        return res.status(400).json({ error: 'Task must include users as non-empty array of strings' });
     };
     try {
         const board = req.board;
@@ -95,6 +96,6 @@ router.param('taskId', async (req, res, next, taskId) => {
     next();
 });
 
-router.use('/:taskId/comment', require('./comment').default);
+router.use('/:taskId/comment', await commentRouter);
 
-export default router;
+export default router ;

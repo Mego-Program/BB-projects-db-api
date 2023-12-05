@@ -1,6 +1,6 @@
 import { Router } from 'express';
 const router = Router();
-import { enforcePost, enforceGet, enforcePatch, enforceDelete } from '../utils/enforcers';
+import { enforcePost, enforceGet, enforcePatch, enforceDelete } from '../utils/enforcers.js';
 
 router.use((req, res, next) => {
     req.parent = req.task || req.board;

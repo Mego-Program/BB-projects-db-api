@@ -30,9 +30,9 @@ const enforceDelete = (req, res, next) => {
     }
 };
 
-module.exports = {
+export {
     enforceGet,
     enforcePatch,
     enforcePost,
     enforceDelete
-};
+}
