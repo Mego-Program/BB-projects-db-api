@@ -81,11 +81,20 @@ router.patch('/:boardId/update/users', (req, res) => {
         return res.status(400).json({ error: 'Users must be sent as non-empty array of strings' });
     };
     try {
-        body.users.forEach(user => {
-            if (!(user.id in dataAllUsers().id)){
-                return res.status(400).json({ error: 'There is invlid user' });
-            }
-        })
+        try {
+            const validUserIds = dataAllUsers().map(user => user.id);
+        
+            body.users.forEach(user => {
+                if (!validUserIds.includes(user.id)) {
+                    return res.status(400).json({ error: 'There is an invalid user' });
+                }
+            });
+                
+        }catch (error) {
+            console.error('Error during user validation:', error);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+
         req.board.users = req.body.users;
         req.board.save();
         res.json(req.board);
@@ -95,12 +104,14 @@ router.patch('/:boardId/update/users', (req, res) => {
 });
 
 function addUserToBoard(board, userId) {
+    const allUserIds = dataAllUsers().map(user => user.id);
     const index = board.users.indexOf(userId);
 
-    if (index === -1 && userId in dataAllUsers().id)  {
+    if (index === -1 && allUserIds.includes(userId)) {
         board.users.push(userId);
+        board.save(); 
     }
-    board.save();
+    return board;
 }
 
 function removeUserFromBoard(board, userId) {
@@ -108,9 +119,10 @@ function removeUserFromBoard(board, userId) {
 
     if (index !== -1) {
         board.users.splice(index, 1);
+        board.save(); 
     }
 
-    board.save();
+    return board;
 }
 
 router.patch('/:boardId/update/users/:userId/add', (req, res) => {
@@ -141,7 +153,7 @@ router.patch('/:boardId/update/users/:userId/remove', (req, res) => {
         removeUserFromBoard(req.board, userId);
         res.json(req.board);
     } catch (error) {
-        res.status(500).json({ error: 'Internal Server Error' });
+       return  res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 

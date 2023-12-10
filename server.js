@@ -1,10 +1,10 @@
 
 import express, { json } from 'express';
-const app = express();
-const port = 3000;
 import { router as boardRouter } from './models/board.js';
 import cors from "cors";
-app.use(cors);
+const app = express();
+const port = 3000;
+app.use(cors());
 
 // Authentication middleware
 import axios from 'axios';
@@ -31,7 +31,7 @@ app.use((req, res, next) => {
 });
 
 app.listen(port, () => {
-    console.log(`Server is running at http://127.0.0.1:${port}`);
+    console.log(`Server is running at sadf http://127.0.0.1:${port}`);
 });
 
 app.use(json());
