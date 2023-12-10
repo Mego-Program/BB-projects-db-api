@@ -3,6 +3,8 @@ import express, { json } from 'express';
 const app = express();
 const port = 3000;
 import { router as boardRouter } from './models/board.js';
+import cors from "cors";
+app.use(cors);
 
 // Authentication middleware
 import axios from 'axios';

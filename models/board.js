@@ -6,6 +6,8 @@ import { enforceGet, enforcePost, enforcePatch, enforceDelete } from '../utils/e
 import taskRouter from './task.js'
 import commentRouter from './comment.js'
 import schemas from './schemas.js'
+import dataAllUsers from './usersLink.js'
+
 
 const Board = db.model('Board',schemas.boardSchema)
 
@@ -13,6 +15,7 @@ router.all('/user/:userId/read', enforceGet);
 router.get('/user/:userId/read', async (req, res) => {
     try {
         let boards = await Board.find({ users: req.params.userId }).populate({path: 'tasks.status', select: 'name'}).exec();
+        
         res.json(boards);
     } catch (error) {
         console.log(error);
@@ -78,6 +81,11 @@ router.patch('/:boardId/update/users', (req, res) => {
         return res.status(400).json({ error: 'Users must be sent as non-empty array of strings' });
     };
     try {
+        body.users.forEach(user => {
+            if (!(user.id in dataAllUsers().id)){
+                return res.status(400).json({ error: 'There is invlid user' });
+            }
+        })
         req.board.users = req.body.users;
         req.board.save();
         res.json(req.board);
@@ -89,7 +97,7 @@ router.patch('/:boardId/update/users', (req, res) => {
 function addUserToBoard(board, userId) {
     const index = board.users.indexOf(userId);
 
-    if (index === -1 && userId )  {
+    if (index === -1 && userId in dataAllUsers().id)  {
         board.users.push(userId);
     }
     board.save();
@@ -126,7 +134,9 @@ router.patch('/:boardId/update/users/:userId/remove', (req, res) => {
     if (!checkUsers(req.body.users)) {
         return res.status(400).json({ error: 'Users must be sent as a non-empty array of strings' });
     }
-
+    if (!(userId in dataAllUsers().id) ){
+        return res.status(400).json({ error: 'Unvalid user.' });
+    }
     try {
         removeUserFromBoard(req.board, userId);
         res.json(req.board);
