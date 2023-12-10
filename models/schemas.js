@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import { Schema } from "mongoose";
 
-const commentSchema = new mongoose.Schema({
+const commentSchema = new Schema({
     title: String,
     content: String,
     creator: String,
@@ -8,16 +8,16 @@ const commentSchema = new mongoose.Schema({
 });
 
 
-const taskSchema = new mongoose.Schema({
+const taskSchema = new Schema({
     name: String,
     description: String,
     creationDate: { type: Date, default: Date.now },
-    status: { type: mongoose.Schema.Types.ObjectId, ref: 'Status'},
+    status: { type: Schema.Types.ObjectId, ref: 'Status'},
     users: Array,
     comments: [commentSchema]
 });
 
-const boardSchema = new mongoose.Schema({
+const boardSchema = new Schema({
     name: String,
     description: String,
     creationDate: { type: Date, default: Date.now },
@@ -29,7 +29,7 @@ const boardSchema = new mongoose.Schema({
 });
 
 
-const statusSchema = new mongoose.Schema({
+const statusSchema = new Schema({
     name: String,
     description: String,
     creationDate: { type: Date, default: Date.now },
@@ -38,7 +38,7 @@ const statusSchema = new mongoose.Schema({
 
 
 
-module.exports = {
+export default {
     boardSchema,
     taskSchema,
     statusSchema,

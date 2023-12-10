@@ -1,5 +1,5 @@
 
-module.exports = function (users) {
+export default function (users) {
     if (!Array.isArray(users)) {
         return false;
     };

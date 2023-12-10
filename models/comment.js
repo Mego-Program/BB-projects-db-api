@@ -1,13 +1,13 @@
-const express = require('express');
-const router = express.Router();
-const enforcers = require('../utils/enforcers');
+import { Router } from 'express';
+const router = Router();
+import { enforcePost, enforceGet, enforcePatch, enforceDelete } from '../utils/enforcers.js';
 
 router.use((req, res, next) => {
     req.parent = req.task || req.board;
     next();
 });
 
-router.all('/create', enforcers.enforcePost);
+router.all('/create', enforcePost);
 router.post('/create', async (req, res) => {
     if (!req.body.user) {
         return res.status(400).json({ error: 'Creator user id required' });
@@ -29,19 +29,19 @@ router.post('/create', async (req, res) => {
     }
 });
 
-router.all('/:commentId/read', enforcers.enforceGet);
+router.all('/:commentId/read', enforceGet);
 router.get('/:commentId/read', async (req, res) => {
     res.json(req.comment);
 });
 
-router.all('/:commentId/update', enforcers.enforcePatch);
+router.all('/:commentId/update', enforcePatch);
 router.patch('/:commentId/update', (req, res) => {
     req.comment.content = req.body.content;
     req.board.save();
     res.json(req.comment);
 });
 
-router.all('/:commentId/delete', enforcers.enforceDelete);
+router.all('/:commentId/delete', enforceDelete);
 router.delete('/:commentId/delete', (req, res) => {
     try {
         req.comment.deleteOne();
@@ -66,4 +66,4 @@ router.param('commentId', async (req, res, next, commentId) => {
 });
 
 
-module.exports = router;
+export default router;

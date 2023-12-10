@@ -1,20 +1,21 @@
-const express = require('express');
-const router = express.Router();
-const statuses = require('./status').defaultStatuses;
-const getStatus = require('./status').getStatus;
-const checkUsers = require('../utils/checkUsers');
-const enforcers = require('../utils/enforcers');
-
-router.all('/create', enforcers.enforcePost);
+import { Router } from 'express';
+import commentRouter from './comment.js';
+const router = Router();
+const statuses = import('./status.js').defaultStatuses;
+const getStatus = import('./status.js').getStatus;
+import checkUsers from '../utils/checkUsers.js';
+import { enforcePost, enforceGet, enforcePatch, enforceDelete } from '../utils/enforcers.js';
+import dataAllUsers from './usersLink.js'
+router.all('/create', enforcePost);
 router.post('/create', async (req, res) => {
     if (!req.body.name) {
-        res.status(400).json({ error: 'Task must include name' });
+       return res.status(400).json({ error: 'Task must include name' });
     };
     if (!req.body.description) {
-        res.status(400).json({ error: 'Task must include description' });
+        return res.status(400).json({ error: 'Task must include description' });
     };
     if (!checkUsers(req.body.users)) {
-        res.status(400).json({ error: 'Task must include users as non-empty array of strings' });
+        return res.status(400).json({ error: 'Task must include users as non-empty array of strings' });
     };
     try {
         const board = req.board;
@@ -32,12 +33,12 @@ router.post('/create', async (req, res) => {
     }
 });
 
-router.all('/:taskId/read', enforcers.enforceGet);
+router.all('/:taskId/read', enforceGet);
 router.get('/:taskId/read', (req, res) => {
     res.json(req.task);
 });
 
-router.use('/:taskId/update', enforcers.enforcePatch);
+router.use('/:taskId/update', enforcePatch);
 router.patch('/:taskId/update', async (req, res) => {
     try {
         req.task.name = req.body.name || req.task.name;
@@ -72,7 +73,7 @@ router.patch('/:taskId/update/status', async (req, res) => {
     }
 });
 
-router.all('/:taskId/delete', enforcers.enforceDelete);
+router.all('/:taskId/delete', enforceDelete);
 router.delete('/:taskId/delete', (req, res) => {
     try {
         req.task.deleteOne();
@@ -95,6 +96,6 @@ router.param('taskId', async (req, res, next, taskId) => {
     next();
 });
 
-router.use('/:taskId/comment', require('./comment'));
+router.use('/:taskId/comment', await commentRouter);
 
-module.exports = router;
+export default router ;

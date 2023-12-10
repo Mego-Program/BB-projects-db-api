@@ -1,6 +1,7 @@
-const db = require('../connect');
+import db from '../connect.js';
+import schemas from './schemas.js';
 
-const Status = db.model('Status', require('./schemas').statusSchema);
+const Status = db.model('Status', schemas.statusSchema);
 
 const Open = getDefaultStatus('Open');
 const InProgress = getDefaultStatus('In Progress');
@@ -61,7 +62,7 @@ const getStatus = async (name) => {
 }
 
 
-module.exports = {defaultStatuses , getStatus};
+export default {defaultStatuses , getStatus};
 
 
 // possible future feature: create custom statuses
