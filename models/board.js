@@ -6,7 +6,6 @@ import { enforceGet, enforcePost, enforcePatch, enforceDelete } from '../utils/e
 import taskRouter from './task.js'
 import commentRouter from './comment.js'
 import schemas from './schemas.js'
-import dataAllUsers from './usersLink.js'
 
 
 const Board = db.model('Board',schemas.boardSchema)

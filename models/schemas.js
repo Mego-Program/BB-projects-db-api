@@ -1,15 +1,15 @@
 import { Schema } from "mongoose";
 
 const commentSchema = new Schema({
-    title: String,
-    content: String,
-    creator: String,
+    title: {type: String, defult: "Untitled"},
+    content: {type: String, required: true },
+    creator: {type: String, required: true },
     creationDate: { type: Date, default: Date.now },
 });
 
 
 const taskSchema = new Schema({
-    name: String,
+    name: {type: String, required: true },
     description: String,
     creationDate: { type: Date, default: Date.now },
     status: { type: Schema.Types.ObjectId, ref: 'Status'},
@@ -18,10 +18,10 @@ const taskSchema = new Schema({
 });
 
 const boardSchema = new Schema({
-    name: String,
+    name: {type: String, required: true },
     description: String,
     creationDate: { type: Date, default: Date.now },
-    isSprint: Boolean,
+    isSprint: {type: Boolean, default: true},
     endDate: Date,
     users: Array,
     tasks: [taskSchema],
