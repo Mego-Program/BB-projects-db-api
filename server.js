@@ -2,14 +2,17 @@
 import express, { json } from 'express';
 import { router as boardRouter } from './models/board.js';
 import { usersRouter} from './models/users.js';
-
 import cors from "cors";
+import dotenv from "dotenv";
+
+dotenv.config();
+
 const app = express();
-const port = 3000;
+const port = process.env.PORT;
 app.use(cors());
 
 // Authentication middleware
-import axios from 'axios';
+//import axios from 'axios';
 
 // app.use((req, res, next) => {
 //     // // Call the auth API to authenticate the request

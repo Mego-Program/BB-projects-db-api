@@ -1,12 +1,6 @@
 ###
-get http://127.0.0.1:3000/users/moshe/read
+get http://127.0.0.1:3000/users/all
 
 
 ###
-POST  http://127.0.0.1:3000/users/net
-content-type: application/json
-
-{
-    "name": "sample",
-    "time": "Wed, 21 Oct 2015 18:27:50 GMT"
-}
+POST  http://127.0.0.1:3000/users/self

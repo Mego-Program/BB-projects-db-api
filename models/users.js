@@ -1,8 +1,21 @@
 import express from 'express';
-import {allUsers, inUsers, exUsers} from './servicesUsers.js';
+import {allUsers, inUsers, exUsers, selfUser} from './servicesUsers.js';
 
 const router = express.Router();
 
+router.get('/self' , async (req, res) =>{
+  try{
+    const token = req.headers.authorization;
+    const result = await selfUser(token);
+    res.status(200).json(result);
+  }
+catch(error){
+  
+    console.log(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+  })
+  
 router.get('/all' , async (req, res) =>{
   try{
     const token = req.headers.authorization;

@@ -1,15 +1,20 @@
 import express from 'express';
 const router = express.Router();
-import db from '../connect.js'
 import checkUsers from '../utils/checkUsers.js'
 import { enforceGet, enforcePost, enforcePatch, enforceDelete } from '../utils/enforcers.js'
 import taskRouter from './task.js'
 import commentRouter from './comment.js'
 import schemas from './schemas.js'
+import dbConnection from "../connect.js";
 
+import mongoose from 'mongoose';
 
-const Board = db.model('Board',schemas.boardSchema)
+// הוסף קריאה למשתנה connectToDatabase וקריאה לפונקציה connect
+const mongooseConnection = dbConnection;
+mongoose.model('Board', schemas.boardSchema);
 
+// כאשר אתה קורא לפונקציה model על משתנה של mongoose, ולא ישירות על mongoose
+const Board = mongoose.model('Board');
 router.all('/user/:userId/read', enforceGet);
 router.get('/user/:userId/read', async (req, res) => {
     try {
@@ -79,21 +84,7 @@ router.patch('/:boardId/update/users', (req, res) => {
     if (!checkUsers(req.body.users)) {
         return res.status(400).json({ error: 'Users must be sent as non-empty array of strings' });
     };
-    try {
-        try {
-            const validUserIds = dataAllUsers().map(user => user.id);
-        
-            body.users.forEach(user => {
-                if (!validUserIds.includes(user.id)) {
-                    return res.status(400).json({ error: 'There is an invalid user' });
-                }
-            });
-                
-        }catch (error) {
-            console.error('Error during user validation:', error);
-            return res.status(500).json({ error: 'Internal server error' });
-        }
-
+    try{
         req.board.users = req.body.users;
         req.board.save();
         res.json(req.board);
@@ -103,10 +94,9 @@ router.patch('/:boardId/update/users', (req, res) => {
 });
 
 function addUserToBoard(board, userId) {
-    const allUserIds = dataAllUsers().map(user => user.id);
     const index = board.users.indexOf(userId);
 
-    if (index === -1 && allUserIds.includes(userId)) {
+    if (index === -1) {
         board.users.push(userId);
         board.save(); 
     }
@@ -144,9 +134,6 @@ router.patch('/:boardId/update/users/:userId/remove', (req, res) => {
 
     if (!checkUsers(req.body.users)) {
         return res.status(400).json({ error: 'Users must be sent as a non-empty array of strings' });
-    }
-    if (!(userId in dataAllUsers().id) ){
-        return res.status(400).json({ error: 'Unvalid user.' });
     }
     try {
         removeUserFromBoard(req.board, userId);

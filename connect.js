@@ -1,7 +1,20 @@
+import dotenv from 'dotenv';
 import { createConnection } from "mongoose";
 
-const password = "juPEpCdGLZ2p8ZmJ"
-const uri = "mongodb+srv://projects-api:" + password + "@cluster0.8zlsyqk.mongodb.net/?retryWrites=true&w=majority"
+dotenv.config({
+  path: './.env'
+});
 
-const db = createConnection(uri)
-export default db
+const uri = process.env.DB_URI;
+
+const dbConnection = createConnection(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+dbConnection.on('error', console.error.bind(console, 'connection error:'));
+dbConnection.once('open', function () {
+  console.log('Connected to the database');
+});
+
+export default dbConnection;
