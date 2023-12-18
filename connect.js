@@ -1,16 +1,13 @@
 import dotenv from 'dotenv';
-import { createConnection } from "mongoose";
+import { createConnection } from 'mongoose';
 
 dotenv.config({
-  path: './.env'
+  path: './.env',
 });
 
 const uri = process.env.DB_URI;
 
-const dbConnection = createConnection(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+const dbConnection = createConnection(uri);
 
 dbConnection.on('error', console.error.bind(console, 'connection error:'));
 dbConnection.once('open', function () {
