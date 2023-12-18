@@ -7,14 +7,11 @@ import commentRouter from './comment.js'
 import schemas from './schemas.js'
 import dbConnection from "../connect.js";
 
-import mongoose from 'mongoose';
-
-// הוסף קריאה למשתנה connectToDatabase וקריאה לפונקציה connect
 const mongooseConnection = dbConnection;
-mongoose.model('Board', schemas.boardSchema);
+mongooseConnection.model('Board', schemas.boardSchema);
 
-// כאשר אתה קורא לפונקציה model על משתנה של mongoose, ולא ישירות על mongoose
-const Board = mongoose.model('Board');
+const Board = mongooseConnection.model('Board');
+
 router.all('/user/:userId/read', enforceGet);
 router.get('/user/:userId/read', async (req, res) => {
     try {
