@@ -5,7 +5,7 @@ const statuses = import('./status.js').defaultStatuses;
 const getStatus = import('./status.js').getStatus;
 import checkUsers from '../utils/checkUsers.js';
 import { enforcePost, enforceGet, enforcePatch, enforceDelete } from '../utils/enforcers.js';
-import dataAllUsers from './usersLink.js'
+//import dataAllUsers from './usersLink.js'
 router.all('/create', enforcePost);
 router.post('/create', async (req, res) => {
     if (!req.body.name) {
