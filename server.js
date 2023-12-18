@@ -12,7 +12,11 @@ const port = process.env.PORT;
 app.use(cors());
 
 // Authentication middleware
+//<<<<<<< users-api
 //import axios from 'axios';
+//=======
+//const axios = require('axios');
+//>>>>>>> main
 
 // app.use((req, res, next) => {
 //     // // Call the auth API to authenticate the request
