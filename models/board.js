@@ -9,7 +9,7 @@ import dbConnection from "../connect.js";
 
 const mongooseConnection = dbConnection;
 mongooseConnection.model('Board', schemas.boardSchema);
-
+//db.model('Board', schemas.boardSchema);
 const Board = mongooseConnection.model('Board');
 
 router.all('/user/:userId/read', enforceGet);

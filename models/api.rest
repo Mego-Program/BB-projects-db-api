@@ -1,6 +1,9 @@
 ###
-get http://127.0.0.1:3000/users/all
+GET http://127.0.0.1:3000/users/all
+
+headers: {'authorization': token}
 
 
 ###
-POST  http://127.0.0.1:3000/users/self
+GET  http://127.0.0.1:3000/users/self
+
