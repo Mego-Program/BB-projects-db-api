@@ -19,7 +19,7 @@ const inUsers = async function (token, idsArray){
 }
 
 const exUsers = async function (token, idsArray){
-    const response = await axios.get(process.env.API_URL, { headers: {'authorization': token}, params: { exlude: idsArray }})
+    const response = await axios.get(process.env.API_URL, { headers: {'authorization': token}, params: { exclude: idsArray }})
     return response.data;
 }
 
