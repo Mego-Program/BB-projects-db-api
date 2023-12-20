@@ -1,9 +1,115 @@
-###
+#Variables
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Ijc3MGRuNzcwQGdtYWlsLmNvbSIsInRpbWVzdGFtcCI6MTcwMzA2MzAxMzQ3MSwiaWF0IjoxNzAzMDYzMDEzLCJleHAiOjg2NTcwMzA2MzAxM30.AI1aNemkNW6m8kb18smfk7gKssP-KHi6cYP37Sy2jis
+
+###################################
+##### board CRUD
+
+#read board
+GET http://127.0.0.1:3000/board/:boardID/read
+Authorization: {{token}}
+
+### read list of boards by user
+GET http://127.0.0.1:3000/board/user/:userID/read
+
+### create board
+POST http://127.0.0.1:3000/board/create
+Authorization: {{token}}
+
+content-type: application/json
+{
+            "name": "test",
+            "description": "api.rest",
+            "isSprint": true,
+            "users": ["65781261eab8c3139b9845b0","6570622586d04dbba2bbfbce","6582a7fcf7057e9757b6d51d"]
+        }
+
+### change title, description of board
+PATCH  http://127.0.0.1:3000/board/:boardID/update
+
+### change user's list of board
+PATCH  http://127.0.0.1:3000/board/:boardID/update/users
+
+### add user to board
+PATCH  http://127.0.0.1:3000/board/:boardId/update/users/:userId/add
+
+### remove user to board
+PATCH  http://127.0.0.1:3000/board/:boardId/update/users/:userId/remove
+
+### remove board
+DELETE http://127.0.0.1:3000/board/:boardID/delete
+
+###################################
+### task CRUD
+
+###create task
+POST http://127.0.0.1:3000/task/create
+
+### read task
+POST http://127.0.0.1:3000/task/:taskId/read
+
+### update task's title, description
+PATCH  http://127.0.0.1:3000/task/:taskId/update
+
+### update list of users for task
+PATCH  http://127.0.0.1:3000/task/:taskId/update/users
+
+### update status of task
+PATCH  http://127.0.0.1:3000/task/:taskId/update/status
+
+### delete task
+PATCH  http://127.0.0.1:3000/task/:taskId/delete
+
+###################################
+### comment CRUD
+
+###create comment
+POST http://127.0.0.1:3000/comment/create
+
+### read comment
+POST http://127.0.0.1:3000/comment/:commentId/read
+
+### edit comment
+PATCH  http://127.0.0.1:3000/comment/:commentId/update
+
+
+### delete comment
+PATCH  http://127.0.0.1:3000/comment/:commentId/delete
+
+##############################
+### users API
+
+### list of all users detailes
 GET http://127.0.0.1:3000/users/all
+Authorization: {{token}}
 
-headers: {'authorization': token}
-
-
-###
+### find user details by token
 GET  http://127.0.0.1:3000/users/self
+Authorization: {{token}}
 
+### return list of users details in the list of task/board
+GET http://127.0.0.1:3000/users/in
+Authorization: {{token}}
+content-type: application/json
+
+{
+  "only": [
+    "656592028218532eeda92285",
+    "656598dd749f65404dcc2950",
+    "6565a08d28e8903bb0d9c44f"
+  ]
+}
+### return list of users details that not in the list of task/board
+GET  http://127.0.0.1:3000/users/ex
+Authorization: {{token}}
+content-type: application/json
+
+{
+  "exclude": [
+    "656592028218532eeda92285",
+    "656598dd749f65404dcc2950",
+    "6565a08d28e8903bb0d9c44f"
+  ]
+}
+
+
+################################
