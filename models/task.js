@@ -38,7 +38,7 @@ router.get('/:taskId/read', (req, res) => {
     res.json(req.task);
 });
 
-router.use('/:taskId/update', enforcePatch);
+router.all('/:taskId/update', enforcePatch);
 router.patch('/:taskId/update', async (req, res) => {
     try {
         req.task.name = req.body.name || req.task.name;
@@ -74,14 +74,14 @@ router.patch('/:taskId/update/status', async (req, res) => {
 });
 
 router.all('/:taskId/delete', enforceDelete);
-router.delete('/:taskId/delete', (req, res) => {
+router.delete('/:taskId/delete', async (req, res) => {
     try {
-        req.task.deleteOne();
-        req.board.save();
-        res.sendStatus(204);
-    } catch (error) {
+        let del = await Task.findByIdAndDelete(req.task._id).exec();
+        res.json(del);
+    }
+     catch (error) {
         res.status(500).json({ error: 'Internal Server Error' });
-    };
+    }
 });
 
 router.param('taskId', async (req, res, next, taskId) => {

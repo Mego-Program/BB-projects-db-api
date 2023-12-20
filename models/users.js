@@ -7,7 +7,7 @@ router.get('/self', async (req, res) => {
   try {
     const token = req.headers.authorization;
     const result = await selfUser(token);
-    res.status(200).json(result);
+    res.status(200).json({ data: result });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
