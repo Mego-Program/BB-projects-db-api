@@ -35,7 +35,7 @@ app.use(cors());
 //     // }
 // });
 app.get('/', (req, res) => {
-    res.send('Hello Infra-Bnei-Brak Team! This is our Express server.');
+    res.send('Hello Projects-Bnei-Brak Team! This is our Express server.');
 });
 
 
