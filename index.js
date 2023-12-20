@@ -34,7 +34,9 @@ app.use(cors());
 //     //     res.status(401).json({ error: 'Unauthorized' });
 //     // }
 // });
-
+app.get('/', (req, res) => {
+    res.send('Hello Infra-Bnei-Brak Team! This is our Express server.');
+});
 
 
 app.use(json());
