@@ -87,6 +87,7 @@ router.all("/:taskId/delete", enforceDelete);
 router.delete("/:taskId/delete", async (req, res) => {
   try {
     let del = await Task.findByIdAndDelete(req.task._id).exec();
+    await req.board.save();
     res.json(del);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
