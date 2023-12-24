@@ -9,7 +9,7 @@ import dbConnection from "../connect.js";
 
 const mongooseConnection = dbConnection;
 mongooseConnection.model('Board', schemas.boardSchema);
-//db.model('Board', schemas.boardSchema);
+
 const Board = mongooseConnection.model('Board');
 
 router.all('/user/:userId/read', enforceGet);
@@ -46,6 +46,7 @@ router.post('/create', async (req, res) => {
             isSprint: req.body.isSprint,
             endDate: req.body.isSprint ? Date.now() + (req.body.sprintLength * 60 * 1000) : null,
             users: req.body.users,
+            comments: []
         });
         await board.save();
         res.status(201).json(board);
@@ -171,4 +172,4 @@ router.use('/:boardId/task', taskRouter);
 
 router.use('/:boardId/comment', commentRouter);
 
-export {router, checkUsers}
+export {Board, router, checkUsers}
