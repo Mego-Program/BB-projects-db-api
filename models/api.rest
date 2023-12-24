@@ -1,6 +1,7 @@
 #Variables
 @token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Ijc3MGRuNzcwQGdtYWlsLmNvbSIsInRpbWVzdGFtcCI6MTcwMzA2MzAxMzQ3MSwiaWF0IjoxNzAzMDYzMDEzLCJleHAiOjg2NTcwMzA2MzAxM30.AI1aNemkNW6m8kb18smfk7gKssP-KHi6cYP37Sy2jis
-
+@name=test
+@desc=rest.api
 ###################################
 ##### board CRUD
 
@@ -13,15 +14,11 @@ GET http://127.0.0.1:3000/board/user/:userID/read
 
 ### create board
 POST http://127.0.0.1:3000/board/create
-Authorization: {{token}}
 
+Authorization: {{token}}
 content-type: application/json
-{
-            "name": "test",
-            "description": "api.rest",
-            "isSprint": true,
-            "users": ["65781261eab8c3139b9845b0","6570622586d04dbba2bbfbce","6582a7fcf7057e9757b6d51d"]
-        }
+data:{"name": "{{name}}","description": "{{desc}}","users": ["65781261eab8c3139b9845b0","6570622586d04dbba2bbfbce","6582a7fcf7057e9757b6d51d"]}
+        
 
 ### change title, description of board
 PATCH  http://127.0.0.1:3000/board/:boardID/update
@@ -92,11 +89,7 @@ Authorization: {{token}}
 content-type: application/json
 
 {
-  "only": [
-    "656592028218532eeda92285",
-    "656598dd749f65404dcc2950",
-    "6565a08d28e8903bb0d9c44f"
-  ]
+  "boardID": "6582e82ce86c3858a9469ff8"
 }
 ### return list of users details that not in the list of task/board
 GET  http://127.0.0.1:3000/users/ex
@@ -104,11 +97,7 @@ Authorization: {{token}}
 content-type: application/json
 
 {
-  "exclude": [
-    "656592028218532eeda92285",
-    "656598dd749f65404dcc2950",
-    "6565a08d28e8903bb0d9c44f"
-  ]
+  "boardID": "6582e82ce86c3858a9469ff8"
 }
 
 
