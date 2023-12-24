@@ -50,19 +50,18 @@ async function getDefaultStatus(name) {
 };
 };
 
-const defaultStatuses = {
+export const defaultStatuses = {
     Open: Open,
     InProgress: InProgress,
     Resolved: Resolved,
     Closed: Closed
 }
 
-const getStatus = async (name) => {
+export const getStatus = async (name) => {
     return (await Status.findOne({ name: name }));
 }
 
 
-export default {defaultStatuses , getStatus};
 
 
 // possible future feature: create custom statuses

@@ -39,7 +39,15 @@ DELETE http://127.0.0.1:3000/board/:boardID/delete
 ### task CRUD
 
 ###create task
-POST http://127.0.0.1:3000/task/create
+POST http://127.0.0.1:3000/board/6582e82ce86c3858a9469ff8/task/create
+Authorization: {{token}}
+content-type: application/json
+
+{
+   "name": "task-name",
+   "description": "Task Description",
+   "users": ["id1", "Id2"]  
+}
 
 ### read task
 POST http://127.0.0.1:3000/task/:taskId/read
