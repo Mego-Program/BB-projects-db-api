@@ -13,7 +13,7 @@ const taskSchema = new Schema({
     description: String,
     creationDate: { type: Date, default: Date.now },
     status: { type: Schema.Types.ObjectId, ref: 'Status'},
-    user: String,
+    user: {type: String, default: ""},
     comments: [commentSchema]
 });
 

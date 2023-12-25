@@ -62,7 +62,7 @@ content-type: application/json
 {
    "name": "task",
    "description": "Task Description",
-   "users": "id1"
+   "user": "netanel"
 }
 
 ### read task
@@ -75,8 +75,8 @@ Authorization: {{token}}
 content-type: application/json
 
 {
-   "name": "net",
-   "description": "Tas"
+   "name": "nt",
+   "description": "Ta"
 } 
 ### update list of users for task
 PATCH  http://127.0.0.1:3000/board/6582e82ce86c3858a9469ff8/task/658958214dea2ae18904105f/update/users
@@ -90,10 +90,10 @@ PATCH  http://127.0.0.1:3000/board/6582e82ce86c3858a9469ff8/task/658958214dea2ae
 Authorization: {{token}}
 content-type: application/json
 
-{"status": "Closed" } 
+{"status": "Open" } 
 
 ### delete task
-DELETE  http://127.0.0.1:3000/board/6582e82ce86c3858a9469ff8/task/658952ed434e0f07643c6b08/delete
+DELETE  http://127.0.0.1:3000/board/6582e82ce86c3858a9469ff8/task/6589697c91dc610a68400fbc/delete
 Authorization: {{token}}
 
 ###################################

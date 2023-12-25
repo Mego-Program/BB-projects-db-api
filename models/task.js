@@ -4,7 +4,7 @@ const router = Router();
 
 import { defaultStatuses as statuses, getStatus } from "./status.js";
 
-import checkUsers from "../utils/checkUsers.js";
+//import checkUsers from "../utils/checkUsers.js";
 import {
   enforcePost,
   enforceGet,
@@ -31,7 +31,7 @@ router.post("/create", async (req, res) => {
       name: req.body.name,
       description: req.body.description,
       status: await statuses.Open,
-      users: req.body.user
+      user: req.body.user
     });
     await board.save();
     res.status(201).send(board.tasks[board.tasks.length - 1]);
