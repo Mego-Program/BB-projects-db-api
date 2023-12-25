@@ -129,7 +129,7 @@ Authorization: {{token}}
 content-type: application/json
 
 {
-  "boardID": "6582e82ce86c3858a9469ff8"
+  "boardID": "658989ee134ec5c24eb84bc1"
 }
 ### return list of users details that not in the list of task/board
 GET  http://127.0.0.1:3000/users/ex
@@ -137,7 +137,7 @@ Authorization: {{token}}
 content-type: application/json
 
 {
-  "boardID": "6582e82ce86c3858a9469ff8"
+  "boardID": "658983ea134ec5c24eb84bb2"
 }
 
 

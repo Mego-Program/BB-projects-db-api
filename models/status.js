@@ -61,10 +61,3 @@ export const getStatus = async (name) => {
     return (await Status.findOne({ name: name }));
 }
 
-
-
-
-// possible future feature: create custom statuses
-
-// module.exports = router;
-
