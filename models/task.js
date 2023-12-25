@@ -31,7 +31,7 @@ router.post("/create", async (req, res) => {
       name: req.body.name,
       description: req.body.description,
       status: await statuses.Open,
-      users: req.body.user,
+      users: req.body.user
     });
     await board.save();
     res.status(201).send(board.tasks[board.tasks.length - 1]);
@@ -59,11 +59,11 @@ router.patch("/:taskId/update", async (req, res) => {
 });
 
 router.patch("/:taskId/update/user", (req, res) => {
-  if (!checkUsers(req.body.user)) {
-    return res
-      .status(400)
-      .json({ error: "Users must be sent as non-empty array of strings" });
-  }
+  //if (!checkUsers(req.body.user)) {
+    //return res
+     // .status(400)
+   //   .json({ error: "Users must be sent as non-empty array of strings" });
+ // }
   try {
     req.task.user = req.body.user;
     req.board.save();
@@ -106,6 +106,6 @@ router.param("taskId", async (req, res, next, taskId) => {
   next();
 });
 
-router.use("/:taskId/comment", await commentRouter);
+router.use("/:taskId/comment", commentRouter);
 
 export default router;
