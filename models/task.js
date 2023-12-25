@@ -20,18 +20,18 @@ router.post("/create", async (req, res) => {
   if (!req.body.description) {
     return res.status(400).json({ error: "Task must include description" });
   }
-  if (!checkUsers(req.body.users)) {
-    return res
-      .status(400)
-      .json({ error: "Task must include users as non-empty array of strings" });
-  }
+  //if (!checkUsers(req.body.user)) {
+    //return res
+      //.status(400)
+      //.json({ error: "Task must include users as non-empty array of strings" });
+  //}
   try {
     const board = req.board;
     board.tasks.push({
       name: req.body.name,
       description: req.body.description,
       status: await statuses.Open,
-      users: req.body.users,
+      users: req.body.user,
     });
     await board.save();
     res.status(201).send(board.tasks[board.tasks.length - 1]);
