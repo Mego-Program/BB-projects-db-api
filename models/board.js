@@ -12,19 +12,6 @@ mongooseConnection.model('Board', schemas.boardSchema);
 
 const Board = mongooseConnection.model('Board');
 
-router.all('/user/:userId/read', enforceGet);
-router.get('/user/:userId/read', async (req, res) => {
-    try {
-        let boards = await Board.find({ users: req.params.userId }).populate({path: 'tasks.status', select: 'name'}).exec();
-        
-        res.json(boards);
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
-
-
 router.all('/create', enforcePost);
 router.post('/create', async (req, res) => {
     if (!req.body.name) {
@@ -51,6 +38,19 @@ router.post('/create', async (req, res) => {
         await board.save();
         res.status(201).json(board);
     } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+
+router.all('/user/:userId/read', enforceGet);
+router.get('/user/:userId/read', async (req, res) => {
+    try {
+        let boards = await Board.find({ users: req.params.userId }).populate({path: 'tasks.status', select: 'name'}).exec();
+        
+        res.json(boards);
+    } catch (error) {
+        console.log(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
@@ -91,17 +91,21 @@ router.patch('/:boardId/update/users', (req, res) => {
     }
 });
 
-function addUserToBoard(board, userId) {
+async function addUserToBoard(boardId, userId) {
+    const board = await Board.findById(boardId);
     const index = board.users.indexOf(userId);
+
 
     if (index === -1) {
         board.users.push(userId);
         board.save(); 
     }
+
     return board;
 }
 
-function removeUserFromBoard(board, userId) {
+async function removeUserFromBoard(boardId, userId) {
+    const board = await Board.findById(boardId)
     const index = board.users.indexOf(userId);
 
     if (index !== -1) {
@@ -112,30 +116,24 @@ function removeUserFromBoard(board, userId) {
     return board;
 }
 
-router.patch('/:boardId/update/users/:userId/add', (req, res) => {
-    const { boardId, userId } = req.params;
-
-    if (!checkUsers(req.body.users)) {
-        return res.status(400).json({ error: 'Users must be sent as a non-empty array of strings' });
-    }
-
+router.patch('/:boardId/update/users/add', (req, res) => {
+    const userId = req.body.userId;
+    const boardId = req.params.boardId;
     try {
-        addUserToBoard(req.board, userId);
-        res.json(req.board);
+        const board = addUserToBoard(boardId, userId);
+        res.json(board);
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
-router.patch('/:boardId/update/users/:userId/remove', (req, res) => {
-    const { boardId, userId } = req.params;
+router.patch('/:boardId/update/users/remove', (req, res) => {
+    const userId = req.body.userId;
+    const boardId = req.params.boardId;
 
-    if (!checkUsers(req.body.users)) {
-        return res.status(400).json({ error: 'Users must be sent as a non-empty array of strings' });
-    }
     try {
-        removeUserFromBoard(req.board, userId);
-        res.json(req.board);
+        const board = removeUserFromBoard(boardId, userId);
+        res.json(board);
     } catch (error) {
        return  res.status(500).json({ error: 'Internal Server Error' });
     }
