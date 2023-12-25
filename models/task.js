@@ -84,14 +84,14 @@ router.patch("/:taskId/update/status", async (req, res) => {
 });
 
 router.all("/:taskId/delete", enforceDelete);
-router.delete("/:taskId/delete", async (req, res) => {
+router.delete('/:taskId/delete', (req, res) => {
   try {
-    let del = await Task.findByIdAndDelete(req.task._id).exec();
-    await req.board.save();
-    res.json(del);
+      req.task.deleteOne();
+      req.board.save();
+      res.sendStatus(200);
   } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
-  }
+      res.status(500).json({ error: 'Internal Server Error' });
+  };
 });
 
 router.param("taskId", async (req, res, next, taskId) => {

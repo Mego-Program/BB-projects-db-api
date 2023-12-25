@@ -105,12 +105,13 @@ async function addUserToBoard(boardId, userId) {
 }
 
 async function removeUserFromBoard(boardId, userId) {
-    const board = await Board.findById(boardId)
+    const board = await Board.findById(boardId);
     const index = board.users.indexOf(userId);
+    console.log(index);
 
     if (index !== -1) {
         board.users.splice(index, 1);
-        board.save(); 
+        await board.save(); 
     }
 
     return board;
@@ -127,7 +128,7 @@ router.patch('/:boardId/update/users/add', (req, res) => {
     }
 });
 
-router.patch('/:boardId/update/users/remove', (req, res) => {
+router.patch('/:boardId/update/users/remove', async (req, res) => {
     const userId = req.body.userId;
     const boardId = req.params.boardId;
 
@@ -135,7 +136,8 @@ router.patch('/:boardId/update/users/remove', (req, res) => {
         const board = removeUserFromBoard(boardId, userId);
         res.json(board);
     } catch (error) {
-       return  res.status(500).json({ error: 'Internal Server Error' });
+        console.error(error);
+        return res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 

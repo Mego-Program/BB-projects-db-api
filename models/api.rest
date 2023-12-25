@@ -20,29 +20,36 @@ GET http://127.0.0.1:3000/board/user/65781261eab8c3139b9845b0/read
 Authorization: {{token}}
 
 ### change title, description of board
-PATCH  http://127.0.0.1:3000/board/:boardID/update
+PATCH  http://127.0.0.1:3000/board/6582e82ce86c3858a9469ff8/update
+Authorization: {{token}}
+content-type: application/json
+
+{"name": "??", "description":"test"}
 
 ### change user's list of board
-PATCH  http://127.0.0.1:3000/board/:boardID/update/users
+PATCH  http://127.0.0.1:3000/board/6582e82ce86c3858a9469ff8/update/users
+Authorization: {{token}}
+content-type: application/json
 
+{"users": ["65781261eab8c3139b9845b0","6582a7fcf7057e9757b6d51d"]}
 ### add user to board
-PATCH  http://127.0.0.1:3000/board/6582e82ce86c3858a9469ff8/update/users/add
+PATCH  http://127.0.0.1:3000/board/6582e4773aa9bffc5d4d62c3/update/users/add
 Authorization: {{token}}
 content-type: application/json
 
 {"userId":"65781261eab8c3139b9845b0"}
 
 ### remove user to board
-PATCH  http://127.0.0.1:3000/board/6582e82ce86c3858a9469ff8/update/users/remove
-
+PATCH http://127.0.0.1:3000/board/6582e82ce86c3858a9469ff8/update/users/remove
 Authorization: {{token}}
 content-type: application/json
 
-{"userId":"65781261eab8c3139b9845b0"}
+{"userId":"656598dd749f65404dcc2950"}
 
 
 ### remove board
-DELETE http://127.0.0.1:3000/board/:boardID/delete
+DELETE http://127.0.0.1:3000/board/6582e4173aa9bffc5d4d62c1/delete
+Authorization: {{token}}
 
 ###################################
 ### task CRUD
@@ -53,7 +60,7 @@ Authorization: {{token}}
 content-type: application/json
 
 {
-   "name": "task-name",
+   "name": "task",
    "description": "Task Description",
    "users": ["id1", "Id2"]  
 }
@@ -71,7 +78,7 @@ PATCH  http://127.0.0.1:3000/task/:taskId/update/users
 PATCH  http://127.0.0.1:3000/task/:taskId/update/status
 
 ### delete task
-DELETE  http://127.0.0.1:3000/board/6582e82ce86c3858a9469ff8/task/65882c78c7f0404db729e39f/delete
+DELETE  http://127.0.0.1:3000/board/6582e82ce86c3858a9469ff8/task/658952ed434e0f07643c6b08/delete
 Authorization: {{token}}
 
 ###################################
