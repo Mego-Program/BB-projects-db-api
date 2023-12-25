@@ -58,14 +58,14 @@ router.patch("/:taskId/update", async (req, res) => {
   }
 });
 
-router.patch("/:taskId/update/users", (req, res) => {
-  if (!checkUsers(req.body.users)) {
+router.patch("/:taskId/update/user", (req, res) => {
+  if (!checkUsers(req.body.user)) {
     return res
       .status(400)
       .json({ error: "Users must be sent as non-empty array of strings" });
   }
   try {
-    req.task.users = req.body.users;
+    req.task.user = req.body.user;
     req.board.save();
     res.json(req.task);
   } catch (error) {

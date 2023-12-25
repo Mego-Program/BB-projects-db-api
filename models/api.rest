@@ -62,20 +62,35 @@ content-type: application/json
 {
    "name": "task",
    "description": "Task Description",
-   "users": ["id1", "Id2"]  
+   "users": "id1"
 }
 
 ### read task
-POST http://127.0.0.1:3000/task/:taskId/read
-
+GET http://127.0.0.1:3000/board/6582e82ce86c3858a9469ff8/task/658954fc4dea2ae189040fc8/read
+Authorization: {{token}}
+ 
 ### update task's title, description
-PATCH  http://127.0.0.1:3000/task/:taskId/update
+PATCH  http://127.0.0.1:3000/board/6582e82ce86c3858a9469ff8/task/658954fc4dea2ae189040fc8/update
+Authorization: {{token}}
+content-type: application/json
 
+{
+   "name": "net",
+   "description": "Tas"
+} 
 ### update list of users for task
-PATCH  http://127.0.0.1:3000/task/:taskId/update/users
+PATCH  http://127.0.0.1:3000/board/6582e82ce86c3858a9469ff8/task/658958214dea2ae18904105f/update/users
+Authorization: {{token}}
+content-type: application/json
+
+{"user": "65781261eab8c3139b9845b0"} 
 
 ### update status of task
-PATCH  http://127.0.0.1:3000/task/:taskId/update/status
+PATCH  http://127.0.0.1:3000/board/6582e82ce86c3858a9469ff8/task/658958214dea2ae18904105f/update/status
+Authorization: {{token}}
+content-type: application/json
+
+{"status": "Closed" } 
 
 ### delete task
 DELETE  http://127.0.0.1:3000/board/6582e82ce86c3858a9469ff8/task/658952ed434e0f07643c6b08/delete
