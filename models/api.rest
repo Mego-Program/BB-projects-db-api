@@ -1,7 +1,7 @@
 #Variables
+
 @token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Ijc3MGRuNzcwQGdtYWlsLmNvbSIsInRpbWVzdGFtcCI6MTcwMzA2MzAxMzQ3MSwiaWF0IjoxNzAzMDYzMDEzLCJleHAiOjg2NTcwMzA2MzAxM30.AI1aNemkNW6m8kb18smfk7gKssP-KHi6cYP37Sy2jis
-@name=test
-@desc=rest.api
+
 ###################################
 ##### board CRUD
 
@@ -10,9 +10,9 @@ POST http://127.0.0.1:3000/board/create
 Authorization: {{token}}
 content-type: application/json
 
-  {"name": "nnnn" ,"description": "{{desc}}","users": ["65781261eab8c3139b9845b0","6570622586d04dbba2bbfbce","6582a7fcf7057e9757b6d51d"]}        
+  {"name": "nnnn" ,"description": "desc","users": ["65781261eab8c3139b9845b0","6570622586d04dbba2bbfbce","6582a7fcf7057e9757b6d51d"]}        
 ###read board
-GET http://127.0.0.1:3000/board/6582e82ce86c3858a9469ff8/read
+GET http://127.0.0.1:3000/board/6589918bf31c4987760174b1/read
 Authorization: {{token}}
 
 ### read list of boards by userID
@@ -20,7 +20,7 @@ GET http://127.0.0.1:3000/board/user/65781261eab8c3139b9845b0/read
 Authorization: {{token}}
 
 ### change title, description of board
-PATCH  http://127.0.0.1:3000/board/6582e82ce86c3858a9469ff8/update
+PATCH  http://127.0.0.1:3000/board/6589918bf31c4987760174b1/update
 Authorization: {{token}}
 content-type: application/json
 
@@ -101,8 +101,23 @@ Authorization: {{token}}
 
 ###create comment
 POST http://127.0.0.1:3000/comment/create
+Authorization: {{token}}
+content-type: application/json
 
-### read comment
+{"user":{
+      "_id": "65781261eab8c3139b9845b0",
+      "firstName": "netanel",
+      "lastName": "dahan",
+      "email": "770dn770@gmail.com",
+      "isDeleted": false,
+      "createdAt": "2023-12-12T07:57:21.125Z",
+      "__v": 0,
+      "title": "developer"
+    },
+    "title": " TEST",
+    "content": "test"
+}
+    ### read comment
 POST http://127.0.0.1:3000/comment/:commentId/read
 
 ### edit comment
@@ -129,16 +144,14 @@ Authorization: {{token}}
 content-type: application/json
 
 {
-  "boardID": "658989ee134ec5c24eb84bc1"
+  "boardID": "6589918bf31c4987760174b1"
 }
 ### return list of users details that not in the list of task/board
 GET  http://127.0.0.1:3000/users/ex
 Authorization: {{token}}
 content-type: application/json
 
-{
-  "boardID": "658983ea134ec5c24eb84bb2"
-}
+{ "boardID": "6589918bf31c4987760174b1"}
 
 
 ################################

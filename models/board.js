@@ -1,6 +1,5 @@
 import express from 'express';
 const router = express.Router();
-import checkUsers from '../utils/checkUsers.js'
 import { enforceGet, enforcePost, enforcePatch, enforceDelete } from '../utils/enforcers.js'
 import taskRouter from './task.js'
 import commentRouter from './comment.js'
@@ -20,7 +19,7 @@ router.post('/create', async (req, res) => {
     if (!req.body.description) {
         return res.status(400).json({ error: 'Board must include description' });
     };
-    if (!checkUsers(req.body.users)) {
+    if (!req.body.users) {
         return res.status(400).json({ error: 'Users must be sent as non-empty array of strings' });
     };
     if (req.body.isSprint && !req.body.sprintLength) {
@@ -79,9 +78,6 @@ router.patch('/:boardId/update', async (req, res) => {
 });
 
 router.patch('/:boardId/update/users', (req, res) => {
-    if (!checkUsers(req.body.users)) {
-        return res.status(400).json({ error: 'Users must be sent as non-empty array of strings' });
-    };
     try{
         req.board.users = req.body.users;
         req.board.save();
@@ -107,7 +103,6 @@ async function addUserToBoard(boardId, userId) {
 async function removeUserFromBoard(boardId, userId) {
     const board = await Board.findById(boardId);
     const index = board.users.indexOf(userId);
-    console.log(index);
 
     if (index !== -1) {
         board.users.splice(index, 1);
@@ -172,4 +167,4 @@ router.use('/:boardId/task', taskRouter);
 
 router.use('/:boardId/comment', commentRouter);
 
-export {Board, router, checkUsers}
+export {Board, router}
