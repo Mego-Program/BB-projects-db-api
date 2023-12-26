@@ -50,10 +50,14 @@ router.get('/in', async (req, res) => {
 router.get('/ex', async (req, res) => {
   try {
     const token = req.headers.authorization;
+    console.log('authorization', req.headers.authorization)
     if (!token) {
       return res.status(401).json({ error: 'Unauthorized - Token Missing' });
     }
-    const boardID = req.body.boardID;
+    const boardID = req.query.boardID;
+    console.log({boardID}, req.body)
+    console.log('params', req.query)
+
     const result = await exUsers(token, boardID);
     res.status(200).json(result);
   } catch (error) {
