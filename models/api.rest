@@ -24,7 +24,7 @@ PATCH  http://127.0.0.1:3000/board/6589918bf31c4987760174b1/update
 Authorization: {{token}}
 content-type: application/json
 
-{"name": "??", "description":"test"}
+{"name": "???????", "description":"test"}
 
 ### change user's list of board
 PATCH  http://127.0.0.1:3000/board/6582e82ce86c3858a9469ff8/update/users
