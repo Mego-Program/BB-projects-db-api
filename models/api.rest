@@ -10,13 +10,12 @@ POST http://127.0.0.1:3000/board/create
 Authorization: {{token}}
 content-type: application/json
 
-  {"name": "nnnn" ,"description": "desc","users": ["65781261eab8c3139b9845b0","6570622586d04dbba2bbfbce","6582a7fcf7057e9757b6d51d"]}        
+  {"name": "nnn" ,"description": "desc","users": ["65781261eab8c3139b9845b0","6570622586d04dbba2bbfbce","6582a7fcf7057e9757b6d51d"]}        
 ###read board
 GET http://127.0.0.1:3000/board/6589918bf31c4987760174b1/read
 Authorization: {{token}}
 
 ### read list of boards by userID
-GET http://127.0.0.1:3000/board/user/65781261eab8c3139b9845b0/read
 Authorization: {{token}}
 
 ### change title, description of board
