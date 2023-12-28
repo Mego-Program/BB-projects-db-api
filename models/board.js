@@ -19,19 +19,19 @@ router.post('/create', async (req, res) => {
     if (!req.body.description) {
         return res.status(400).json({ error: 'Board must include description' });
     };
-    if (!req.body.users) {
-        return res.status(400).json({ error: 'Users must be sent as non-empty array of strings' });
-    };
     if (req.body.isSprint && !req.body.sprintLength) {
         return res.status(400).json({ error: 'Sprint must include sprintLength in minutes' });
     };
+    function parseJwt (token) {
+        return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+    }
     try {
         const board = new Board({
             name: req.body.name,
             description: req.body.description,
             isSprint: req.body.isSprint,
             endDate: req.body.isSprint ? Date.now() + (req.body.sprintLength * 60 * 1000) : null,
-            users: req.body.users,
+            users:[parseJwt(req.headers.authorization).userId],
             comments: []
         });
         await board.save();

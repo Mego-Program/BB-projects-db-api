@@ -9,13 +9,13 @@ POST http://127.0.0.1:3000/board/create
 Authorization: {{token}}
 content-type: application/json
 
-  {"name": "nnnn" ,"description": "desc","users": ["6570622586d04dbba2bbfbce","6582a7fcf7057e9757b6d51d"]}        
+  {"name": "TEST" ,"description": "desc"}        
 ###read board
 GET http://127.0.0.1:3000/board/658d4acdeea6e59765da5515/read
 Authorization: {{token}}
 
 ### read list of boards by userID
-GET http://127.0.0.1:3000/board/user/65685eb396bd0ac45be647a9/read
+GET http://127.0.0.1:3000/board/user/65781261eab8c3139b9845b0/read
 Authorization: {{token}}
 
 ### change title, description of board
@@ -143,14 +143,14 @@ Authorization: {{token}}
 content-type: application/json
 
 {
-  "boardID": "658d4981eea6e59765da550a"
+  "boardID": "658d74da6c28cf6fa700ba53"
 }
 ### return list of users details that not in the list of task/board
 GET  http://127.0.0.1:3000/users/ex
 Authorization: {{token}}
 content-type: application/json
 
-{ "boardID": "658d4981eea6e59765da550a"}
+{ "boardID": "658d74da6c28cf6fa700ba53"}
 
 
 ################################
