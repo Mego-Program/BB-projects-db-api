@@ -11,7 +11,10 @@ mongooseConnection.model('Board', schemas.boardSchema);
 
 const Board = mongooseConnection.model('Board');
 
-router.all('/create', enforcePost);
+function parseJwt (token) {
+    return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+}
+    router.all('/create', enforcePost);
 router.post('/create', async (req, res) => {
     if (!req.body.name) {
         return res.status(400).json({ error: 'Board must include name' });
@@ -22,9 +25,7 @@ router.post('/create', async (req, res) => {
     if (req.body.isSprint && !req.body.sprintLength) {
         return res.status(400).json({ error: 'Sprint must include sprintLength in minutes' });
     };
-    function parseJwt (token) {
-        return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-    }
+
     try {
         const board = new Board({
             name: req.body.name,
@@ -91,12 +92,10 @@ async function addUserToBoard(boardId, userId) {
     const board = await Board.findById(boardId);
     const index = board.users.indexOf(userId);
 
-
     if (index === -1) {
         board.users.push(userId);
         board.save(); 
     }
-
     return board;
 }
 
@@ -108,7 +107,6 @@ async function removeUserFromBoard(boardId, userId) {
         board.users.splice(index, 1);
         await board.save(); 
     }
-
     return board;
 }
 

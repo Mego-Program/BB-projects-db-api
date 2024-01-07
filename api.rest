@@ -26,13 +26,14 @@ content-type: application/json
 {"name": "???????", "description":"test"}
 
 ### change user's list of board
-PATCH  http://127.0.0.1:3000/board/658d45ceeea6e59765da54f7/update/users
+PATCH  http://127.0.0.1:3000/board/6591622839f41b1f96f9dede/update/users
 Authorization: {{token}}
 content-type: application/json
 
 {"users": ["65781261eab8c3139b9845b0","6582a7fcf7057e9757b6d51d"]}
+
 ### add user to board
-PATCH  http://127.0.0.1:3000/board/6582e4773aa9bffc5d4d62c3/update/users/add
+PATCH  http://127.0.0.1:3000/board/659165201d22d85edb24d8f2/update/users/add
 Authorization: {{token}}
 content-type: application/json
 
@@ -44,7 +45,6 @@ Authorization: {{token}}
 content-type: application/json
 
 {"userId":"656598dd749f65404dcc2950"}
-
 
 ### remove board
 DELETE http://127.0.0.1:3000/board/6582e4173aa9bffc5d4d62c1/delete
@@ -61,9 +61,7 @@ content-type: application/json
 {
    "name": "task",
    "description": "Task Description",
-   "user": "netanel"
 }
-
 ### read task
 GET http://127.0.0.1:3000/board/6582e82ce86c3858a9469ff8/task/658954fc4dea2ae189040fc8/read
 Authorization: {{token}}
@@ -138,15 +136,15 @@ GET  http://127.0.0.1:3000/users/self
 Authorization: {{token}}
 
 ### return list of users details in the list of task/board
-GET http://127.0.0.1:3000/users/in
+POST http://127.0.0.1:3000/users/in
 Authorization: {{token}}
 content-type: application/json
 
 {
-  "boardID": "658d74da6c28cf6fa700ba53"
+  "boardID": "6591622839f41b1f96f9dede"
 }
 ### return list of users details that not in the list of task/board
-GET  http://127.0.0.1:3000/users/ex
+POST  http://127.0.0.1:3000/users/ex
 Authorization: {{token}}
 content-type: application/json
 

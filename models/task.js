@@ -3,8 +3,6 @@ import commentRouter from "./comment.js";
 const router = Router();
 
 import { defaultStatuses as statuses, getStatus } from "./status.js";
-
-//import checkUsers from "../utils/checkUsers.js";
 import {
   enforcePost,
   enforceGet,
@@ -20,11 +18,6 @@ router.post("/create", async (req, res) => {
   if (!req.body.description) {
     return res.status(400).json({ error: "Task must include description" });
   }
-  //if (!checkUsers(req.body.user)) {
-    //return res
-      //.status(400)
-      //.json({ error: "Task must include users as non-empty array of strings" });
-  //}
   try {
     const board = req.board;
     board.tasks.push({
@@ -59,11 +52,6 @@ router.patch("/:taskId/update", async (req, res) => {
 });
 
 router.patch("/:taskId/update/user", (req, res) => {
-  //if (!checkUsers(req.body.user)) {
-    //return res
-     // .status(400)
-   //   .json({ error: "Users must be sent as non-empty array of strings" });
- // }
   try {
     req.task.user = req.body.user;
     req.board.save();

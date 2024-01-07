@@ -31,13 +31,14 @@ router.get('/all', async (req, res) => {
   }
 });
 
-router.get('/in', async (req, res) => {
+router.post('/in', async (req, res) => {
   try {
     const token = req.headers.authorization;
     if (!token) {
       return res.status(401).json({ error: 'Unauthorized - Token Missing' });
     }
-    const boardID = req.body.boardID; 
+    const boardID = req.body.boardID;
+    console.log(boardID); 
     const result = await inUsers(token, boardID);
     res.status(200).json(result);
   } catch (error) {
@@ -46,7 +47,7 @@ router.get('/in', async (req, res) => {
   }
 });
 
-router.get('/ex', async (req, res) => {
+router.post('/ex', async (req, res) => {
   try {
     const token = req.headers.authorization;
     if (!token) {
