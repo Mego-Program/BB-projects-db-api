@@ -47,14 +47,10 @@ async function getDefaultStatus(name) {
         creationDate: Date.now(),
         precedence: defaultStatusPrecedences[name]
     }).save();
-};
-};
+};};
 
 export const defaultStatuses = {
-    Open: Open,
-    InProgress: InProgress,
-    Resolved: Resolved,
-    Closed: Closed
+    Open: Open, InProgress: InProgress, Resolved: Resolved, Closed: Closed
 }
 
 export const getStatus = async (name) => {

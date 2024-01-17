@@ -11,7 +11,11 @@ content-type: application/json
 
   {"name": "TEST" ,"description": "desc"}        
 ###read board
-GET http://127.0.0.1:3000/board/658d4acdeea6e59765da5515/read
+GET http://127.0.0.1:3000/board/6594541c89caf3381fabeb88/read
+Authorization: {{token}}
+
+### read all boards
+GET http://127.0.0.1:3000/board/readAll
 Authorization: {{token}}
 
 ### read list of boards by userID
@@ -26,7 +30,7 @@ content-type: application/json
 {"name": "???????", "description":"test"}
 
 ### change user's list of board
-PATCH  http://127.0.0.1:3000/board/6591622839f41b1f96f9dede/update/users
+PATCH  http://127.0.0.1:3000/board/656443af82ec97100332772d/update/users
 Authorization: {{token}}
 content-type: application/json
 
@@ -97,7 +101,7 @@ Authorization: {{token}}
 ### comment CRUD
 
 ###create comment
-POST http://127.0.0.1:3000/comment/create
+POST http://127.0.0.1:3000/board/658d45ceeea6e59765da54f7/comment/create
 Authorization: {{token}}
 content-type: application/json
 
@@ -141,14 +145,14 @@ Authorization: {{token}}
 content-type: application/json
 
 {
-  "boardID": "6591622839f41b1f96f9dede"
+  "boardID": "656443af82ec97100332772d"
 }
 ### return list of users details that not in the list of task/board
 POST  http://127.0.0.1:3000/users/ex
 Authorization: {{token}}
 content-type: application/json
 
-{ "boardID": "658d74da6c28cf6fa700ba53"}
+{ "boardID": "656443af82ec97100332772d"}
 
 
 ################################

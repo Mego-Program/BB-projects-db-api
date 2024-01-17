@@ -43,6 +43,17 @@ router.post('/create', async (req, res) => {
 });
 
 
+router.get('/readAll', async (req, res) => {
+    try {
+        let boards = await Board.find().select('id name').exec();
+        
+        res.json(boards);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 router.all('/user/:userId/read', enforceGet);
 router.get('/user/:userId/read', async (req, res) => {
     try {

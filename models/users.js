@@ -38,7 +38,6 @@ router.post('/in', async (req, res) => {
       return res.status(401).json({ error: 'Unauthorized - Token Missing' });
     }
     const boardID = req.body.boardID;
-    console.log(boardID); 
     const result = await inUsers(token, boardID);
     res.status(200).json(result);
   } catch (error) {
