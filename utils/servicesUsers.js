@@ -16,16 +16,17 @@ const allUsers = async function (token){
 }
 
 const inUsers = async function (token, boardID){
-
     const board = await Board.findById(boardID).exec();
-    const response = await axios.get((process.env.USR_URL + "/list"), {headers: { 'authorization': token }, data: { only: board.users }});
+    const response = await axios.get((process.env.USR_URL + "/list"), 
+        {headers: { 'authorization': token }, data: { only: board.users }});
     
     return response.data;
 }
 
 const exUsers = async function (token, boardID){
     const board = await Board.findById(boardID).exec();
-    const response = await axios.get(process.env.USR_URL+"/list", {headers: { 'authorization': token }, data: { exclude: board.users }});
+    const response = await axios.get(process.env.USR_URL+"/list",
+         {headers: { 'authorization': token }, data: { exclude: board.users }});
     
     return response.data;
 }
